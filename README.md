@@ -1,33 +1,33 @@
-# CoordRep-MOF-v3: Periodic Coordination Priors, Carboxylate-C Filtering, and Exact High-CN ($\text{CN}=2\dots 9$) Procrustes Polyhedral Descriptors for MOFs
+# CoordRep-MOF-v3: Periodic Coordination Priors, Carboxylate-C Filtering, and Exact High-CN (`CN = 2..9`) Procrustes Polyhedral Descriptors for MOFs
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-brightgreen.svg)](pyproject.toml)
 
-**CoordRep-MOF-v3** (`periodic_covalent_radius_direction_procrustes_v3`) is a self-contained Python & PyTorch library for extracting **periodic metal-center coordination geometry descriptors** and **exact $SO(3)$ unit-direction Procrustes polyhedral shape scores** across coordination numbers $\text{CN} \in \{2, 3, 4, 5, 6, 7, 8, 9\}$ in Metal–Organic Frameworks (MOFs) and periodic coordination polymers.
+**CoordRep-MOF-v3** (`periodic_covalent_radius_direction_procrustes_v3`) is a self-contained Python & PyTorch library for extracting **periodic metal-center coordination geometry descriptors** and **exact $\mathrm{SO}(3)$ unit-direction Procrustes polyhedral shape scores** across coordination numbers $\mathrm{CN} \in \{2, 3, 4, 5, 6, 7, 8, 9\}$ in Metal–Organic Frameworks (MOFs) and periodic coordination polymers.
 
-Across the full **QMOF database** (**20,298 periodic MOF structures, 82,089 metal centers**), upgrading from `v1` ($\text{CN}=2\dots 6$ only, unfiltered covalent cutoffs) and `v2` (carboxylate-C filtered, $\text{CN}=2\dots 6$) to **`v3`** boosts valid polyhedral shape coverage from **81.28% (`v1`) $\to$ 83.10% (`v2`) $\to$ 97.08% (`v3`)** (+12,966 metal centers), lifting `Zr/Hf` SBU shape coverage from **0.00% to 99.56%**, `Cd` / `Zn` / `Cu` to **100.00%**, `U/Th` actinide nodes from **1.72% to 88.51%**, and `Ln` lanthanide nodes from **0.16% to 78.40%**.
+Across the full **QMOF database** (**20,298 periodic MOF structures, 82,089 metal centers**), upgrading from `v1` ($\mathrm{CN}=2\dots 6$ only, unfiltered covalent cutoffs) and `v2` (carboxylate-C filtered, $\mathrm{CN}=2\dots 6$) to **`v3`** boosts valid polyhedral shape coverage from **81.28% (`v1`) $\to$ 83.10% (`v2`) $\to$ 97.08% (`v3`)** (+12,966 metal centers), lifting `Zr/Hf` SBU shape coverage from **0.00% to 99.56%**, `Cd` / `Zn` / `Cu` to **100.00%**, `U/Th` actinide nodes from **1.72% to 88.51%**, and `Ln` lanthanide nodes from **0.16% to 78.40%**.
 
 ---
 
 ## Key Highlights & Innovations
 
 1. **Periodic Covalent-Radius Contact Prior (`v1` $\to$ `v3`)**
-   - Uses skinless periodic neighbor enumeration (`ase.neighborlist.neighbor_list`) with Cordero (2008) covalent radii ($d \le 1.25\,(r_M + r_D) + 10^{-8}\text{ \AA}$) to retain all qualifying periodic donor images `(site, [ix, iy, iz])` without arbitrary top-$k$ truncation or oxidation-state heuristics.
-   - Isolates angular stereochemistry from radial bond-length statistics by projecting donor displacements onto unit vectors $\hat{\mathbf{u}}_i = \mathbf{r}_i / \|\mathbf{r}_i\|$ centered at the **metal atom origin** (never translating by the donor centroid).
+   - Uses skinless periodic neighbor enumeration (`ase.neighborlist.neighbor_list`) with Cordero (2008) covalent radii ($d \le 1.25(r_M + r_D) + 10^{-8}$ Å) to retain all qualifying periodic donor images `(site, [ix, iy, iz])` without arbitrary top-$k$ truncation or oxidation-state heuristics.
+   - Isolates angular stereochemistry from radial bond-length statistics by projecting donor displacements onto unit vectors $\hat{\mathbf{u}}_i = \mathbf{r}_i / \lVert\mathbf{r}_i\rVert$ centered at the **metal atom origin** (never translating by the donor centroid).
 
 2. **Chelating Carboxylate-Carbon Artifact Filter (`v2` & `v3`)**
-   - In $\kappa^2$-chelating carboxylate MOF linkers (`-COO⁻` coordinated to $\text{Co}^{2+}$, $\text{Cd}^{2+}$, $\text{Ln}^{3+}$, or alkaline-earth centers), the $sp^2$ carboxylate carbon ($\text{C}$, $r_{\text{cov}} = 0.76\text{ \AA}$) frequently lies at $2.45\text{--}2.85\text{ \AA}$ from the metal—inside the $1.25\,(r_M + r_C)$ sphere—inflating true $\text{CN}=6$ octahedra to $\text{CN}=7,8$ and $\text{CN}=8,9$ lanthanide polyhedra to $\text{CN}=11\dots 13$.
-   - **Rule (`D-006`)**: Any accepted carbon contact ($Z=6$) on a metal center whose Euclidean distance to an accepted oxygen or nitrogen contact ($Z \in \{7, 8\}$) of the *same* metal center satisfies $d(\text{C}, \text{O/N}) < 1.45\text{ \AA}$ is automatically filtered out as a chelating backbone carbon, eliminating **26,475 false M–C contacts** across QMOF while preserving true organometallic carbon donors ($\text{M–CN}$, $\text{M–CO}$, $\text{M–C}\equiv\text{C}$).
+   - In $\kappa^2$-chelating carboxylate MOF linkers (`-COO⁻` coordinated to $\mathrm{Co}^{2+}$, $\mathrm{Cd}^{2+}$, $\mathrm{Ln}^{3+}$, or alkaline-earth centers), the $sp^2$ carboxylate carbon ($\mathrm{C}$, $r_{\mathrm{cov}} = 0.76$ Å) frequently lies at $2.45\text{--}2.85$ Å from the metal—inside the $1.25(r_M + r_C)$ sphere—inflating true $\mathrm{CN}=6$ octahedra to $\mathrm{CN}=7,8$ and $\mathrm{CN}=8,9$ lanthanide polyhedra to $\mathrm{CN}=11\dots 13$.
+   - **Rule (`D-006`)**: Any accepted carbon contact ($Z=6$) on a metal center whose Euclidean distance to an accepted oxygen or nitrogen contact ($Z \in \{7, 8\}$) of the *same* metal center satisfies $d(\mathrm{C}, \mathrm{O/N}) < 1.45$ Å is automatically filtered out as a chelating backbone carbon, eliminating **26,475 false M–C contacts** across QMOF while preserving true organometallic carbon donors ($\mathrm{M{-}CN}$, $\mathrm{M{-}CO}$, $\mathrm{M{-}C{\equiv}C}$).
 
-3. **Exact Polyhedral Shape Templates for High Coordination Numbers ($\text{CN}=7, 8, 9$ in `v3`)**
-   - Extends exact $SO(3)$ unit-direction Procrustes matching from $\text{CN} \in \{2\dots 6\}$ to $\text{CN} \in \{2\dots 9\}$ with canonical two-template polyhedral pairs for high-CN MOF secondary building units (SBUs):
-     - $\text{CN}=7$: **`PBPY7`** ($D_{5h}$ Pentagonal Bipyramid) vs **`OCF7`** ($C_{3v}$ Monocapped Octahedron)
-     - $\text{CN}=8$: **`SAPR8`** ($D_{4d}$ Archimedean Square Antiprism) vs **`CU8`** ($O_h$ Cube)
-     - $\text{CN}=9$: **`TCTPR9`** ($D_{3h}$ Tricapped Trigonal Prism) vs **`CSAPR9`** ($C_{4v}$ Monocapped Square Antiprism)
+3. **Exact Polyhedral Shape Templates for High Coordination Numbers ($\mathrm{CN}=7, 8, 9$ in `v3`)**
+   - Extends exact $\mathrm{SO}(3)$ unit-direction Procrustes matching from $\mathrm{CN} \in \{2\dots 6\}$ to $\mathrm{CN} \in \{2\dots 9\}$ with canonical two-template polyhedral pairs for high-CN MOF secondary building units (SBUs):
+     - $\mathrm{CN}=7$: **`PBPY7`** ($D_{5h}$ Pentagonal Bipyramid) vs **`OCF7`** ($C_{3v}$ Monocapped Octahedron)
+     - $\mathrm{CN}=8$: **`SAPR8`** ($D_{4d}$ Archimedean Square Antiprism) vs **`CU8`** ($O_h$ Cube)
+     - $\mathrm{CN}=9$: **`TCTPR9`** ($D_{3h}$ Tricapped Trigonal Prism) vs **`CSAPR9`** ($C_{4v}$ Monocapped Square Antiprism)
 
-4. **Exact Symmetry-Quotient Reduction ($S_N / G_{O(3)}$) & Closed-Form $3\times 3$ Singular Values**
-   - Exhaustive permutation matching at $\text{CN}=9$ requires $9! = 362{,}880$ SVD evaluations per template per center. Upstream molecular `CoordRep` worked around $\text{CN} > 6$ by sorting inter-vertex distance rows and keeping only $m=40$ greedy candidate permutations—a heuristic that is **not** guaranteed to find the global Procrustes minimum under anisotropic distortion.
-   - Instead of heuristics, `CoordRep-MOF-v3` exploits the exact orthogonal point-group symmetry $G_{O(3)} \subset S_N$ of each achiral polyhedron, reducing the permutation search to left coset representatives $S_N / G_{O(3)}$ (**zero approximation error**, up to $48\times$ fewer permutations) and evaluating the batched $3\times 3$ singular-value sums via Viète's closed-form trigonometric eigenvalue equation (~$50\times$ faster than batched `cuSOLVER` SVD on GPU).
+4. **Exact Symmetry-Quotient Reduction ($S_N / G_{\mathrm{O}(3)}$) & Closed-Form $3\times 3$ Singular Values**
+   - Exhaustive permutation matching at $\mathrm{CN}=9$ requires $9! = 362{,}880$ SVD evaluations per template per center. Upstream molecular `CoordRep` worked around $\mathrm{CN} > 6$ by sorting inter-vertex distance rows and keeping only $m=40$ greedy candidate permutations—a heuristic that is **not** guaranteed to find the global Procrustes minimum under anisotropic distortion.
+   - Instead of heuristics, `CoordRep-MOF-v3` exploits the exact orthogonal point-group symmetry $G_{\mathrm{O}(3)} \subset S_N$ of each achiral polyhedron, reducing the permutation search to left coset representatives $S_N / G_{\mathrm{O}(3)}$ (**zero approximation error**, up to $48\times$ fewer permutations) and evaluating the batched $3\times 3$ singular-value sums via Viète's closed-form trigonometric eigenvalue equation (~$50\times$ faster than batched `cuSOLVER` SVD on GPU).
 
 ---
 
@@ -35,30 +35,29 @@ Across the full **QMOF database** (**20,298 periodic MOF structures, 82,089 meta
 
 ### 1. Metal-Centered Unit-Direction Procrustes Score
 
-Let $U \in \mathbb{R}^{N \times 3}$ be the row matrix of unit donor direction vectors $\hat{\mathbf{u}}_i = (\mathbf{r}_i - \mathbf{r}_M)/\|\mathbf{r}_i - \mathbf{r}_M\|$ around a metal center with coordination number $N = \text{CN}$, and let $V \in \mathbb{R}^{N \times 3}$ be an ideal unit-sphere polyhedral template ($\|U\|_F^2 = \|V\|_F^2 = N$). Optimizing over all vertex permutations $\Pi \in S_N$, proper rotations $R \in SO(3)$, and nonnegative uniform scale $s \ge 0$:
+Let $U \in \mathbb{R}^{N \times 3}$ be the row matrix of unit donor direction vectors $\hat{\mathbf{u}}_i = (\mathbf{r}_i - \mathbf{r}_M)/\lVert\mathbf{r}_i - \mathbf{r}_M\rVert$ around a metal center with coordination number $N = \mathrm{CN}$, and let $V \in \mathbb{R}^{N \times 3}$ be an ideal unit-sphere polyhedral template ($\lVert U\rVert_F^2 = \lVert V\rVert_F^2 = N$). Optimizing over all vertex permutations $\Pi \in S_N$, proper rotations $R \in \mathrm{SO}(3)$, and nonnegative uniform scale $s \ge 0$:
 
 $$
-S(U, V) = 100 \left( 1 - \frac{\max(c^*, 0)^2}{N^2} \right) \in [0, 100], \qquad
-c^* = \max_{\Pi \in S_N} \max_{R \in SO(3)} \operatorname{Tr}\!\left( U^\top \Pi V R \right)
+S(U, V) = 100 \left( 1 - \frac{\max(c^{\ast}, 0)^2}{N^2} \right) \in [0, 100], \qquad c^{\ast} = \max_{\Pi \in S_N} \max_{R \in \mathrm{SO}(3)} \mathrm{Tr}\left( U^{\top} \Pi V R \right)
 $$
 
 where $S(U, V) = 0$ if and only if the donor directions match template $V$ up to permutation, proper rotation, and independent radial bond lengths.
 
-### 2. Symmetry-Quotient Reduction ($S_N / G_{O(3)}$)
+### 2. Symmetry-Quotient Reduction ($S_N / G_{\mathrm{O}(3)}$)
 
-Let $G_{O(3)}(V) = \{ g \in S_N : \exists\, Q_g \in O(3) \text{ s.t. } P_g V = V Q_g \}$ be the orthogonal vertex-permutation symmetry group of template $V$. For any $g \in G_{O(3)}(V)$, the $3\times 3$ cross-covariance matrix $H(\Pi) = (\Pi V)^\top U$ satisfies:
-
-$$
-H(\Pi P_g) = Q_g^\top H(\Pi)
-$$
-
-Since orthogonal left-multiplication preserves singular values, $\sigma_k(H(\Pi P_g)) = \sigma_k(H(\Pi))$ for $k=1,2,3$. Moreover, because all 6 high-CN templates (`PBPY7`, `OCF7`, `SAPR8`, `CU8`, `TCTPR9`, `CSAPR9`) are achiral (possessing improper reflections $Q_{\text{ref}} \in O(3)$ with $\det(Q_{\text{ref}}) = -1$), every $O(3)$ coset $\Pi G_{O(3)}$ contains both $\det \ge 0$ and $\det \le 0$ representatives. Consequently, the maximum over the entire coset under $R \in SO(3)$ is **strictly equal** to the sum of the three singular values of a single coset representative $\bar{\Pi} \in S_N / G_{O(3)}$:
+Let $G_{\mathrm{O}(3)}(V) = \{ g \in S_N : \exists\, Q_g \in \mathrm{O}(3) \text{ s.t. } P_g V = V Q_g \}$ be the orthogonal vertex-permutation symmetry group of template $V$. For any $g \in G_{\mathrm{O}(3)}(V)$, the $3\times 3$ cross-covariance matrix $H(\Pi) = (\Pi V)^{\top} U$ satisfies:
 
 $$
-c^* = \max_{\bar{\Pi} \in S_N / G_{O(3)}(V)} \sum_{k=1}^{3} \sigma_k\!\left( (\bar{\Pi} V)^\top U \right)
+H(\Pi P_g) = Q_g^{\top} H(\Pi)
 $$
 
-| CN | Template | Geometry | Point Group | Full $N!$ | $\|G_{O(3)}\|$ | Exact Cosets $\|S_N / G_{O(3)}\|$ | Reduction Factor |
+Since orthogonal left-multiplication preserves singular values, $\sigma_k(H(\Pi P_g)) = \sigma_k(H(\Pi))$ for $k=1,2,3$. Moreover, because all 6 high-CN templates (`PBPY7`, `OCF7`, `SAPR8`, `CU8`, `TCTPR9`, `CSAPR9`) are achiral (possessing improper reflections $Q_{\mathrm{ref}} \in \mathrm{O}(3)$ with $\det(Q_{\mathrm{ref}}) = -1$), every $\mathrm{O}(3)$ coset $\Pi G_{\mathrm{O}(3)}$ contains both $\det \ge 0$ and $\det \le 0$ representatives. Consequently, the maximum over the entire coset under $R \in \mathrm{SO}(3)$ is **strictly equal** to the sum of the three singular values of a single coset representative $\bar{\Pi} \in S_N / G_{\mathrm{O}(3)}$:
+
+$$
+c^{\ast} = \max_{\bar{\Pi} \in S_N / G_{\mathrm{O}(3)}(V)} \sum_{k=1}^{3} \sigma_k\left( (\bar{\Pi} V)^{\top} U \right)
+$$
+
+| CN | Template | Geometry | Point Group | Full $N!$ | $\lvert G_{\mathrm{O}(3)}\rvert$ | Exact Cosets $\lvert S_N / G_{\mathrm{O}(3)}\rvert$ | Reduction Factor |
 |:---:|:---|:---|:---:|---:|---:|---:|:---:|
 | **2** | `L` | Linear | $D_{\infty h}$ | 2 | — | 2 | $1\times$ |
 | **3** | `TP` | Trigonal Planar | $D_{3h}$ | 6 | — | 6 | $1\times$ |
@@ -74,12 +73,10 @@ $$
 
 ### 3. Analytical $3\times 3$ Singular-Value Sum via Viète's Trigonometric Formula
 
-For each batched $3\times 3$ covariance matrix $H$, its singular values are $\sigma_k(H) = \sqrt{\lambda_k(M)}$, where $M = H^\top H$ is a $3\times 3$ symmetric positive semidefinite matrix. Setting $q = \operatorname{Tr}(M)/3$, $B = M - qI$, $p = \sqrt{\operatorname{Tr}(B^2)/6}$, and $\phi = \frac{1}{3}\arccos\!\left(\operatorname{clip}\!\left(\frac{\det B}{2 p^3}, -1, 1\right)\right)$, the three eigenvalues of $M$ are obtained in closed form without iterative SVD:
+For each batched $3\times 3$ covariance matrix $H$, its singular values are $\sigma_k(H) = \sqrt{\lambda_k(M)}$, where $M = H^{\top} H$ is a $3\times 3$ symmetric positive semidefinite matrix. Setting $q = \mathrm{Tr}(M)/3$, $B = M - qI$, $p = \sqrt{\mathrm{Tr}(B^2)/6}$, and $\phi = \frac{1}{3}\arccos\left(\mathrm{clip}\left(\frac{\det B}{2 p^3}, -1, 1\right)\right)$, the three eigenvalues of $M$ are obtained in closed form without iterative SVD:
 
 $$
-\lambda_1 = q + 2p\cos(\phi), \qquad
-\lambda_3 = q + 2p\cos\!\left(\phi + \frac{2\pi}{3}\right), \qquad
-\lambda_2 = 3q - \lambda_1 - \lambda_3
+\lambda_1 = q + 2p\cos(\phi), \qquad \lambda_3 = q + 2p\cos\left(\phi + \frac{2\pi}{3}\right), \qquad \lambda_2 = 3q - \lambda_1 - \lambda_3
 $$
 
 ---
@@ -93,22 +90,22 @@ All tables below are reproduced in [`benchmarks/qmof_20298_audit/`](benchmarks/q
 | Cohort | Structures | Metal Centers | `v1` `shape_valid` | `v2` `shape_valid` | `v3` `shape_valid` | All-Centers-Valid Structures (`v1` $\to$ `v2` $\to$ `v3`) |
 |:---|---:|---:|---:|---:|---:|:---:|
 | **All QMOF** | 20,298 | 82,089 | 66,724 (**81.28%**) | 68,214 (**83.10%**) | **79,690 (97.08%)** | 15,955 $\to$ 16,408 $\to$ **19,546 (96.29%)** |
-| `original_supported` ($\text{CN}_{v1} \in [2,6]$) | 15,955 | 63,952 | 63,952 (100.0%) | 63,952 (100.0%) | **63,952 (100.0%)** | 15,955 $\to$ 15,955 $\to$ 15,955 |
+| `original_supported` ($\mathrm{CN}_{v1} \in [2,6]$) | 15,955 | 63,952 | 63,952 (100.0%) | 63,952 (100.0%) | **63,952 (100.0%)** | 15,955 $\to$ 15,955 $\to$ 15,955 |
 | `newly_added` (High-CN / SBU expansion) | 4,343 | 18,137 | 2,772 (15.28%) | 4,262 (23.50%) | **15,738 (86.77%)** | 0 $\to$ 453 $\to$ **3,591 (82.68%)** |
 
 ### 2. Coverage by Metal Class (`v1` $\to$ `v2` $\to$ `v3`)
 
 | Metal Class | Centers | Mean CN (`v1` $\to$ `v2/v3`) | `v1` `shape_valid` | `v2` `shape_valid` | `v3` `shape_valid` | Dominant High-CN Polyhedral Motif (`v3`) |
 |:---|---:|:---:|---:|---:|---:|:---|
-| **Zr / Hf** | 2,041 | $8.08 \to 8.01$ | 0.00% | 0.20% | **99.56%** | $\text{CN}=8$: **99.85% `SAPR8`** (UiO-66/MOF-808 SBU, mean score `1.80`) |
-| **Cd** | 8,821 | $5.95 \to 5.86$ | 83.79% | 89.85% | **100.00%** | $\text{CN}=7$: **83.03% `PBPY7`** (mean score `3.86`) |
-| **Zn** | 21,922 | $4.43 \to 4.43$ | 99.96% | 99.98% | **100.00%** | $\text{CN}=4,6$ (`Td` / `Oh`) + 4 $\text{CN}=7$ centers |
-| **Cu** | 12,355 | $4.13 \to 4.12$ | 99.91% | 99.97% | **100.00%** | $\text{CN}=4,5,6$ (`SP` / `SPY` / `Oh`) |
-| **Co** | 3,404 | $5.46 \to 5.37$ | 92.83% | 98.71% | **99.82%** | 200 carboxylate-C artifacts fixed in `v2` + 38 $\text{CN}=7$ in `v3` |
-| **Li/Na/Mg/Ca/Be** | 4,060 | $5.82 \to 5.66$ | 77.68% | 80.34% | **99.29%** | $\text{CN}=7$ (`PBPY7` 58%), $\text{CN}=8$ (`SAPR8` 81%) |
-| **other TM / $p$-block** | 19,934 | $4.91 \to 4.84$ | 93.33% | 95.66% | **99.19%** | +463 centers via `v2` filter, +705 via `v3` $\text{CN}=7..9$ |
-| **U / Th (Actinides)** | 522 | $9.56 \to 7.82$ | 1.72% | 3.26% | **88.51%** | $\text{CN}=7$: **100.0% `PBPY7`** (uranyl $[\text{UO}_2\text{L}_5]$, mean score `0.97`) |
-| **Ln (Lanthanides)** | 6,278 | $12.08 \to 9.02$ | 0.16% | 0.45% | **78.40%** | $\text{CN}=8$: **99.9% `SAPR8`** (`2.74`); $\text{CN}=9$: **62.7% `TCTPR9` / 37.3% `CSAPR9`** (`2.58`) |
+| **Zr / Hf** | 2,041 | $8.08 \to 8.01$ | 0.00% | 0.20% | **99.56%** | $\mathrm{CN}=8$: **99.85% `SAPR8`** (UiO-66/MOF-808 SBU, mean score `1.80`) |
+| **Cd** | 8,821 | $5.95 \to 5.86$ | 83.79% | 89.85% | **100.00%** | $\mathrm{CN}=7$: **83.03% `PBPY7`** (mean score `3.86`) |
+| **Zn** | 21,922 | $4.43 \to 4.43$ | 99.96% | 99.98% | **100.00%** | $\mathrm{CN}=4,6$ (`Td` / `Oh`) + 4 $\mathrm{CN}=7$ centers |
+| **Cu** | 12,355 | $4.13 \to 4.12$ | 99.91% | 99.97% | **100.00%** | $\mathrm{CN}=4,5,6$ (`SP` / `SPY` / `Oh`) |
+| **Co** | 3,404 | $5.46 \to 5.37$ | 92.83% | 98.71% | **99.82%** | 200 carboxylate-C artifacts fixed in `v2` + 38 $\mathrm{CN}=7$ in `v3` |
+| **Li/Na/Mg/Ca/Be** | 4,060 | $5.82 \to 5.66$ | 77.68% | 80.34% | **99.29%** | $\mathrm{CN}=7$ (`PBPY7` 58%), $\mathrm{CN}=8$ (`SAPR8` 81%) |
+| **other TM / $p$-block** | 19,934 | $4.91 \to 4.84$ | 93.33% | 95.66% | **99.19%** | +463 centers via `v2` filter, +705 via `v3` $\mathrm{CN}=7..9$ |
+| **U / Th (Actinides)** | 522 | $9.56 \to 7.82$ | 1.72% | 3.26% | **88.51%** | $\mathrm{CN}=7$: **100.0% `PBPY7`** (uranyl $[\mathrm{UO}_2\mathrm{L}_5]$, mean score `0.97`) |
+| **Ln (Lanthanides)** | 6,278 | $12.08 \to 9.02$ | 0.16% | 0.45% | **78.40%** | $\mathrm{CN}=8$: **99.9% `SAPR8`** (`2.74`); $\mathrm{CN}=9$: **62.7% `TCTPR9` / 37.3% `CSAPR9`** (`2.58`) |
 | **K/Rb/Cs/Sr/Ba** | 2,752 | $9.74 \to 8.71$ | 4.98% | 10.17% | **71.73%** | +1,837 heavy alkaline-earth / alkali centers covered |
 
 ---
@@ -171,17 +168,17 @@ print("Shape scores:", diag["centers"][0]["shape_scores"])
 
 | Columns | Block | Description | Active Condition (`valid_coordination_channels_v3`) |
 |:---:|:---:|:---|:---|
-| `0:9` | **A** | Coordination number one-hot for $\text{CN} \in \{2,3,4,5,6,7,8,9,\ge 10\}$ | Metal site with `coord_valid == 1` |
-| `9` | **A** | Normalized scalar $\min(\text{CN}, 12) / 12$ | Metal site with `coord_valid == 1` |
-| `10` | **A** | Low-CN indicator $\mathbb{I}(\text{CN} \le 1)$ | Metal site with `coord_valid == 1` |
+| `0:9` | **A** | Coordination number one-hot for $\mathrm{CN} \in \{2,3,4,5,6,7,8,9,\ge 10\}$ | Metal site with `coord_valid == 1` |
+| `9` | **A** | Normalized scalar $\min(\mathrm{CN}, 12) / 12$ | Metal site with `coord_valid == 1` |
+| `10` | **A** | Low-CN indicator $\mathbf{1}(\mathrm{CN} \le 1)$ | Metal site with `coord_valid == 1` |
 | `11:19` | **B** | Donor element fraction histogram (`O, N, S, P, C, F, Cl, Other`) | Metal site with `coord_valid == 1` |
-| `19` | **B** | Donor element diversity $N_{\text{unique elements}} / \text{CN}$ | Metal site with `coord_valid == 1` |
-| `20` | **C** | Binary indicator `shape_valid` ($\mathbb{I}(\text{CN} \in \{2\dots 9\})$) | Raw binary indicator (unscaled) |
-| `21:29` | **C** | $\exp(-0.1\,S_t)$ for $\text{CN}=2\dots 6$ templates (`L, TP, Td, SP, TBP, SPY, Oh, TPr`) | `shape_valid == 1` and matching $\text{CN} \in \{2\dots 6\}$ |
-| `29` | **C** | Best-fit polyhedral distortion $\log(1 + \min_t S_t)$ across $\text{CN} \in \{2\dots 9\}$ | `shape_valid == 1` ($\text{CN} \in \{2\dots 9\}$) |
-| `30` | **C** | Two-template shape margin $\tanh(S_{t_1} - S_{t_0})$ across $\text{CN} \in \{4\dots 9\}$ | `shape_valid == 1` and $\text{CN} \in \{4\dots 9\}$ |
-| `31:34` | **R** | Radial bond-length statistics: $\mu(d)$, $\sigma(d)$, $d_{\max}/d_{\min}$ | Metal site with `radial_valid == 1` ($\text{CN} \ge 1$) |
-| `34:36` | **D** | Second-order directional tensor invariants: $\|Q\|_F$, $\det(Q)$ where $Q = \frac{1}{\text{CN}}U^\top U - \frac{1}{3}I_3$ | Metal site with `tensor_valid == 1` ($\text{CN} \ge 1$) |
+| `19` | **B** | Donor element diversity $N_{\mathrm{unique}} / \mathrm{CN}$ | Metal site with `coord_valid == 1` |
+| `20` | **C** | Binary indicator `shape_valid` ($\mathbf{1}(\mathrm{CN} \in \{2\dots 9\})$) | Raw binary indicator (unscaled) |
+| `21:29` | **C** | $\exp(-0.1\,S_t)$ for $\mathrm{CN}=2\dots 6$ templates (`L, TP, Td, SP, TBP, SPY, Oh, TPr`) | `shape_valid == 1` and matching $\mathrm{CN} \in \{2\dots 6\}$ |
+| `29` | **C** | Best-fit polyhedral distortion $\log(1 + \min_t S_t)$ across $\mathrm{CN} \in \{2\dots 9\}$ | `shape_valid == 1` ($\mathrm{CN} \in \{2\dots 9\}$) |
+| `30` | **C** | Two-template shape margin $\tanh(S_{t_1} - S_{t_0})$ across $\mathrm{CN} \in \{4\dots 9\}$ | `shape_valid == 1` and $\mathrm{CN} \in \{4\dots 9\}$ |
+| `31:34` | **R** | Radial bond-length statistics: $\mu(d)$, $\sigma(d)$, $d_{\max}/d_{\min}$ | Metal site with `radial_valid == 1` ($\mathrm{CN} \ge 1$) |
+| `34:36` | **D** | Second-order directional tensor invariants: $\lVert Q\rVert_F$, $\det(Q)$ where $Q = \frac{1}{\mathrm{CN}}U^{\top} U - \frac{1}{3}I_3$ | Metal site with `tensor_valid == 1` ($\mathrm{CN} \ge 1$) |
 
 ---
 
@@ -189,13 +186,13 @@ print("Shape scores:", diag["centers"][0]["shape_scores"])
 
 If you use **CoordRep-MOF-v3** in your research, please cite the following foundational works:
 
-1. **Continuous Shape Measures (CShM) & Classical Polyhedra ($\text{CN}=2\dots 6$)**:
+1. **Continuous Shape Measures (CShM) & Classical Polyhedra ($\mathrm{CN}=2\dots 6$)**:
    - Pinsky, M.; Avnir, D. Continuous Symmetry Measures. 5. The Classical Polyhedra. *Inorg. Chem.* **1998**, *37* (21), 5575–5582. [DOI: 10.1021/ic9804925](https://doi.org/10.1021/ic9804925)
 2. **Seven- and Eight-Coordinate Polyhedral Stereochemistry (`PBPY-7`, `OCF-7`, `SAPR-8`, `CU-8`)**:
    - Casanova, D.; Cirera, J.; Llunell, M.; Alemany, P.; Avnir, D.; Alvarez, S. Minimal Distortion Pathways in Polyhedral Rearrangements. *J. Am. Chem. Soc.* **2004**, *126* (6), 1755–1763. [DOI: 10.1021/ja036479n](https://doi.org/10.1021/ja036479n)
 3. **Nine-Coordinate Polyhedral Stereochemistry (`TCTPR-9`, `CSAPR-9`)**:
    - Ruiz-Martínez, A.; Casanova, D.; Alvarez, S. Polyhedral Structures with an Odd Number of Vertices: Nine-Coordinate Metal Compounds. *Chem. Eur. J.* **2008**, *14* (4), 1291–1303. [DOI: 10.1002/chem.200701137](https://doi.org/10.1002/chem.200701137)
-4. **Orthogonal Procrustes & $SO(3)$ Optimal Rotation**:
+4. **Orthogonal Procrustes & $\mathrm{SO}(3)$ Optimal Rotation**:
    - Schönemann, P. H. A Generalized Solution of the Orthogonal Procrustes Problem. *Psychometrika* **1966**, *31* (1), 1–10. [DOI: 10.1007/BF02289451](https://doi.org/10.1007/BF02289451)
    - Kabsch, W. A Solution for the Best Rotation to Relate Two Sets of Vectors. *Acta Crystallogr. Sect. A* **1976**, *32* (5), 922–923. [DOI: 10.1107/S0567739476001873](https://doi.org/10.1107/S0567739476001873)
 5. **Closed-Form $3\times 3$ Symmetric Eigenvalues (Viète Trigonometric Method)**:
