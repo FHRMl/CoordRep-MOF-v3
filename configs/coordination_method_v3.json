@@ -1,0 +1,64 @@
+{
+  "method_id": "periodic_covalent_radius_direction_procrustes_v3",
+  "base_method_id": "periodic_covalent_radius_direction_procrustes_v2",
+  "status": "project_defined_geometric_prior_v3_carboxylate_c_filtered_cn2_to_9_procrustes",
+  "decision_ref": "D-015",
+  "cutoff_factor": 1.25,
+  "audit_search_factor": 1.35,
+  "cutoff_tolerance_angstrom": 1e-8,
+  "near_cutoff_margin_angstrom": 0.05,
+  "donor_atomic_numbers": [5, 6, 7, 8, 9, 14, 15, 16, 17, 32, 33, 34, 35, 51, 52, 53],
+  "exclude_hydrogen": true,
+  "exclude_metal_metal": true,
+  "carboxylate_c_filter": {
+    "enabled": true,
+    "exclude_donor_atomic_number": 6,
+    "bonded_to_accepted_donor_atomic_numbers": [7, 8],
+    "max_distance_angstrom": 1.45,
+    "decision_ref": "D-006"
+  },
+  "maximum_neighbors": null,
+  "neighbor_backend": "ase.neighborlist.neighbor_list",
+  "covalent_radii_source": "ase.data.covalent_radii_Cordero2008",
+  "reject_ase_placeholder_radius_angstrom": 0.2,
+  "max_nbins": 100000,
+  "max_candidate_pairs": 2000000,
+  "shape_method": "unit_direction_procrustes_proxy_exact_v3_cn2_to_9",
+  "shape_templates": [
+    "L", "TP", "Td", "SP", "TBP", "SPY", "Oh", "TPr",
+    "PBPY7", "OCF7", "SAPR8", "CU8", "TCTPR9", "CSAPR9"
+  ],
+  "shape_templates_by_cn": {
+    "2": ["L"],
+    "3": ["TP"],
+    "4": ["Td", "SP"],
+    "5": ["TBP", "SPY"],
+    "6": ["Oh", "TPr"],
+    "7": ["PBPY7", "OCF7"],
+    "8": ["SAPR8", "CU8"],
+    "9": ["TCTPR9", "CSAPR9"]
+  },
+  "supported_shape_cn": [2, 3, 4, 5, 6, 7, 8, 9],
+  "shape_center": "metal_origin_no_donor_centroid_translation",
+  "shape_radial_normalization": "each_donor_to_unit_length",
+  "shape_permutations": "exact_symmetry_quotient_S_N_mod_G_for_achiral_templates",
+  "shape_rotation": "SO(3)",
+  "shape_scale": "optimal_nonnegative_uniform_scale",
+  "trigonal_prism_height_over_xy_radius": 0.5,
+  "high_cn_template_parameters": {
+    "PBPY7": "D5h_axial_z_pm1_equatorial_pentagon_xy",
+    "OCF7": "C3v_cap_z1_upper_cos_0.5_lower_staggered_cos_minus_inv_sqrt3",
+    "SAPR8": "D4d_archimedean_uniform_edge_z_over_r_2_pow_minus_0.75",
+    "CU8": "Oh_cube_pm1_pm1_pm1_over_sqrt3",
+    "TCTPR9": "D3h_uniform_prism_z_over_r_sqrt3_over_2_plus_3_equatorial_caps",
+    "CSAPR9": "C4v_cap_z1_upper_square_cos_1_over_3_lower_staggered_cos_minus_inv_sqrt2"
+  },
+  "schema_36_mapping": {
+    "column_20": "shape_valid_binary_for_CN_2_to_9",
+    "columns_21_to_28": "exp_minus_0.1_score_for_CN_2_to_6_templates",
+    "column_29": "log1p_min_score_across_CN_templates_for_CN_2_to_9",
+    "column_30": "tanh_score1_minus_score0_for_two_template_CN_4_to_9"
+  },
+  "sensitivity_factors_without_labels": [1.15, 1.35],
+  "scientific_boundary": "geometric_neighbor_prior; excludes_chelating_carboxylate_C_within_1.45A_of_accepted_O_or_N; exact_Procrustes_shape_support_for_CN_2_to_9"
+}
